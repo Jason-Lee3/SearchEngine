@@ -42,6 +42,8 @@ We will store our index _not_ in memory, but in our disk. This will help us with
 ### Ranking
 After building the index, we will use tf-idf, cosine similarity, and important-words to calculate a score for each document, which will help us give more relevant results to the user.
 
+Important-words are words that are in a document/web page's title tag, h1 tag, h2 tag, h3 tag, bolded text, strong words...
+
 ### UI
 The user interface can be created either through a local GUI or a web GUI.
 
