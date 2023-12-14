@@ -81,8 +81,3 @@ In the future, adding more ranking formulas may lead to better user experience a
     If no query shows up, that means no documents were related to that query.
     The user can click the top right CS 121 to go back to homepage.
 
-
-M1 Team:
-Edward Xie - xieey - 16356593
-Jason Lee - jasonel2 - 26256544
-Jooyoung Kim - jooyok3 - 92727848 
