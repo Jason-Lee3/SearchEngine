@@ -9,9 +9,9 @@ import collections
 import os
 import time
 import linecache
+
+
 # object called posting that contains docid, tfidf score, and if this posting contains an important word (boolean value)
-
-
 class Posting:
     def __init__(self, docid, tfidf, importantWord): 
         self.docid = docid
@@ -30,7 +30,7 @@ inverted_index = {}
 doc_id = {}
 numOfDocs = 0
 queueIndex = collections.deque([])
-indexOfIndex = {}
+indexOfIndex = {} #inverted_index is word mapped to a list of postings
 doc_ids = {}
 
 # reads all the files from folder_name DEV and returns a list of all of their json data
@@ -54,6 +54,7 @@ def fileDirectory(folder_name ='DEV'):
     if docCount > 0:
         writePartialIndex(indexNum)
 
+# create the partial index and dump our docs to .txt file
 def writePartialIndex(indexCount):
     filename = "index" + str(indexCount) + ".txt"
     fileobj = open(filename, 'wb')
@@ -62,13 +63,15 @@ def writePartialIndex(indexCount):
     fileobj.close()
     inverted_index.clear()
     queueIndex.append(filename)
-
+# sorts our dictionary by alphabet
 def sortDict():
     global inverted_index
     myKeys = list(inverted_index.keys())
     myKeys.sort()
     inverted_index = {i: inverted_index[i] for i in myKeys}
 
+# document is mapped to its url and inverted_Index is being built
+# inverted_index is a map that maps word to list of postings. 
 def buildIndex(doc):
     global numOfDocs
     doc_id[numOfDocs] = doc['url']
@@ -96,6 +99,7 @@ def makeDocFile():
     with open("doc_id.txt", "w") as file:
         file.write(str(doc_id))
 
+# calculate tfidf
 def tfidf():
     global numOfDocs
     for key in inverted_index:
@@ -105,6 +109,7 @@ def tfidf():
             inverted_index[key][i] = Posting(inverted_index[key][i].docid, inverted_index[key][i].tfidf * idf, inverted_index[key][i].importantWord)
             #print("After", index[key][i].docid, index[key][i].tfidf)
 
+# we will have partial indexes stored in our disk, this function will merge our Indexes together. It will go through line by line, character by character to merge all the indexes together.
 def mergeIndex():
     existing_tokens = set()
     while len(queueIndex) != 0:
@@ -132,7 +137,8 @@ def mergeIndex():
             file.writelines(lines)
         file.close()
     print(len(existing_tokens))
-
+    
+# indexOfIndex is a map that will map word to it's line number
 def buildIndexOfIndex():
     with open('totalIndex.txt', 'r') as file:
         lineNumber = 1
